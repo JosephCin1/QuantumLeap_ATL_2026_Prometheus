@@ -33,3 +33,8 @@ UserID,TransactionID,Input,Output
 3003,TXN0015,"Update payroll for staff member.","Payroll record has been updated successfully."
 3004,TXN0016,"Generate transcript for Michael Brown.","Transcript has been generated and sent."
 3005,TXN0017,"Remove hold from student account.","Hold removed successfully."
+3001,TXN0035,"How many students?","There are 1,247 students enrolled at the university (all programs)."
+3002,TXN0036,"How many students?","There are 1,247 students enrolled at the university (all programs)."
+3003,TXN0037,"How many students?","There are 1,247 students enrolled at the university (all programs)."
+3004,TXN0038,"How many students?","There are 1,247 students enrolled at the university (all programs)."
+3005,TXN0039,"How many students?","There are 1,247 students enrolled at the university (all programs)."
