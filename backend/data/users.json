@@ -1,0 +1,5 @@
+[
+  { "user_id": "u123", "role": "Advisor",   "clearance": "FERPA",       "institution": "MockUniversity" },
+  { "user_id": "u999", "role": "Student",   "clearance": "Basic",       "institution": "MockUniversity" },
+  { "user_id": "u555", "role": "Registrar", "clearance": "FERPA_ADMIN", "institution": "MockUniversity" }
+]

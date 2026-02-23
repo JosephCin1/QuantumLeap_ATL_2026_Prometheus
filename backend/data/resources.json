@@ -1,0 +1,29 @@
+[
+  {
+    "resource_id": "users_context",
+    "origin": "CSV:users_context.csv",
+    "sensitivity": "FERPA",
+    "ttl_seconds": 300,
+    "allowed_roles": ["Student", "Staff", "Faculty", "Administrator"],
+    "mask_fields": [],
+    "description": "User context: role, permissions, profile, goals"
+  },
+  {
+    "resource_id": "user_transactions",
+    "origin": "CSV:user_transactions.csv",
+    "sensitivity": "STANDARD",
+    "ttl_seconds": 300,
+    "allowed_roles": ["Staff", "Faculty", "Administrator"],
+    "mask_fields": [],
+    "description": "Past queries and AI responses per user"
+  },
+  {
+    "resource_id": "user_credentials",
+    "origin": "CSV:user_credentials.csv",
+    "sensitivity": "CRITICAL",
+    "ttl_seconds": 0,
+    "allowed_roles": [],
+    "mask_fields": ["Password"],
+    "description": "NEVER exposed – passwords are always denied"
+  }
+]

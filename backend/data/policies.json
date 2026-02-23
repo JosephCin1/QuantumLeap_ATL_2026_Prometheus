@@ -1,0 +1,30 @@
+{
+  "ccp_version": "1.0",
+  "precedence": ["Institution", "Role", "User"],
+  "masking": {
+    "Password": "full_redact"
+  },
+  "prohibited_resources": ["user_credentials"],
+  "role_access": {
+    "Student": {
+      "allowed": ["users_context"],
+      "self_only": true,
+      "note": "Students can only see their own context"
+    },
+    "Staff": {
+      "allowed": ["users_context", "user_transactions"],
+      "self_only": false,
+      "note": "Staff can view student data but not other staff"
+    },
+    "Faculty": {
+      "allowed": ["users_context", "user_transactions"],
+      "self_only": false,
+      "note": "Faculty has broader access"
+    },
+    "Administrator": {
+      "allowed": ["users_context", "user_transactions"],
+      "self_only": false,
+      "note": "Full access"
+    }
+  }
+}
