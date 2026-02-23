@@ -1,0 +1,4 @@
+username,password,role,clearance
+john@uni.atlanta.edu,123,Student,student
+advisor@uni.atlanta.edu,advisor123,Advisor,advisor
+admin@uni.atlanta.edu,admin123,Administrator,administrator
