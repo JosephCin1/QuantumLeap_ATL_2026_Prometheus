@@ -414,3 +414,164 @@ details {
 .theme-dark .audit-table tbody tr:hover {
   background: #1e3a4c;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ICCP chatbot – identity bar, debug panel, bubble variants
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Identity bar ──────────────────────────────────────────────────────── */
+.identity-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f1f5f9;
+}
+
+.identity-bar label {
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.identity-bar input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+.id-status {
+  font-size: 0.78rem;
+  color: #64748b;
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-dark .identity-bar {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.theme-dark .identity-bar input {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+.theme-dark .id-status {
+  color: #94a3b8;
+}
+
+/* ── Debug panel ───────────────────────────────────────────────────────── */
+.debug-section {
+  margin-top: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.debug-section summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  user-select: none;
+}
+
+.debug-section summary:hover {
+  background: #f1f5f9;
+}
+
+.debug-section pre {
+  margin: 0;
+  padding: 12px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  background: #f8fafc;
+  color: #334155;
+  overflow-x: auto;
+  max-height: 300px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.theme-dark .debug-section {
+  border-color: #334155;
+}
+
+.theme-dark .debug-section summary {
+  background: #0f172a;
+  color: #94a3b8;
+}
+
+.theme-dark .debug-section summary:hover {
+  background: #1e293b;
+}
+
+.theme-dark .debug-section pre {
+  background: #0f172a;
+  color: #cbd5e1;
+}
+
+/* ── Bubble variants ───────────────────────────────────────────────────── */
+.bubble.deny {
+  background: #fef2f2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+}
+
+.bubble.error {
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  color: #92400e;
+}
+
+.bubble.warn {
+  background: #fefce8;
+  border-left: 4px solid #eab308;
+  color: #854d0e;
+  font-size: 0.9rem;
+}
+
+.bubble.loading {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.theme-dark .bubble.deny {
+  background: #450a0a;
+  border-left-color: #dc2626;
+  color: #fca5a5;
+}
+
+.theme-dark .bubble.error {
+  background: #451a03;
+  border-left-color: #d97706;
+  color: #fde68a;
+}
+
+.theme-dark .bubble.warn {
+  background: #422006;
+  border-left-color: #ca8a04;
+  color: #fef08a;
+}
+
+/* ── Larger chat window ────────────────────────────────────────────────── */
+.chat-window {
+  max-height: 380px;
+}
+
+/* ── Disabled send button ──────────────────────────────────────────────── */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -68,6 +68,27 @@ for (const row of rawTxns) {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Reverse-lookup maps – resolve by email or username, not just UserID
+// ---------------------------------------------------------------------------
+const emailToUserIdMap = new Map();
+const usernameToUserIdMap = new Map();
+
+for (const row of rawContext) {
+  if (row.email) emailToUserIdMap.set(row.email.toLowerCase(), row.UserID);
+  if (row.username) usernameToUserIdMap.set(row.username.toLowerCase(), row.UserID);
+}
+
+function resolveUserId(input) {
+  const s = String(input).trim();
+  if (usersContextMap.has(s)) return s;                                // numeric UserID
+  const byUsername = usernameToUserIdMap.get(s.toLowerCase());
+  if (byUsername) return byUsername;                                    // username (jdoe23)
+  const byEmail = emailToUserIdMap.get(s.toLowerCase());
+  if (byEmail) return byEmail;                                         // email
+  return null;
+}
+
 // Load policy + resource descriptors (JSON)
 const resources = JSON.parse(
   fs.readFileSync(path.join(dataDir, "resources.json"), "utf-8")
@@ -83,10 +104,11 @@ function enforce(userId, prompt, requestedResources) {
   const trace_id = crypto.randomUUID();
 
   // ── 1. Identity scope from users_context ───────────────────────────────
-  const user = usersContextMap.get(String(userId));
-  if (!user) {
+  const resolvedId = resolveUserId(userId);
+  if (!resolvedId) {
     return { status: 401, body: { error: "Unknown user" } };
   }
+  const user = usersContextMap.get(resolvedId);
 
   const identityScope = {
     user_id: user.UserID,
@@ -100,8 +122,12 @@ function enforce(userId, prompt, requestedResources) {
 
   // ── 2. Parse requested resources ("resource_id" or "resource_id:subject_id")
   const parsed = requestedResources.map((r) => {
-    const [resource_id, subject_id] = r.split(":");
-    return { resource_id, subject_id: subject_id || user.UserID };
+    const [resource_id, subject_id_raw] = r.split(":");
+    // Resolve subject to numeric UserID (handles email / username / numeric)
+    const subject_id = subject_id_raw
+      ? (resolveUserId(subject_id_raw) || subject_id_raw)
+      : resolvedId;
+    return { resource_id, subject_id };
   });
 
   // ── 3. Validate each resource ──────────────────────────────────────────
