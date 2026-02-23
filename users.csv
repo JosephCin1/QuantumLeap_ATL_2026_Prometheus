@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 role,name,username,role_on_project,context
 Student,John Campus,john@campus.ce.edu,End User,"{""permissions"":[""view_grades""],""goals"":[""access campus ce""],""common_questions"":[""Where is my dashboard?""],""systems_used"":[""student_portal""],""tone_preference"":""supportive"",""profile"":{""level"":""Undergraduate""}}"
 Student,John Doe,jdoe23,End User,"{""permissions"":[""view_grades"",""register_courses"",""view_schedule""],""goals"":[""graduate on time""],""common_questions"":[""How do I register?"",""What is my GPA?""],""systems_used"":[""student_portal"",""lms""],""tone_preference"":""simple and supportive"",""profile"":{""level"":""Undergraduate"",""major"":""Computer Science"",""year"":""Junior""}}"
@@ -20,3 +21,9 @@ Administrator,Angela Watson,awatson,HR Manager,"{""permissions"":[""manage_staff
 Administrator,Daniel Price,dprice,Finance Officer,"{""permissions"":[""view_financial_records""],""goals"":[""maintain budgets""],""common_questions"":[""How do I approve expenses?"",""How do I generate reports?""],""systems_used"":[""finance_system""],""tone_preference"":""formal"",""profile"":{""department"":""Finance"",""access_level"":""High""}}"
 Administrator,Linda Morales,lmorales,Student Services Director,"{""permissions"":[""manage_services""],""goals"":[""support students""],""common_questions"":[""How do I remove holds?"",""How do I manage complaints?""],""systems_used"":[""admin_dashboard""],""tone_preference"":""professional"",""profile"":{""department"":""Student Services"",""access_level"":""High""}}"
 Administrator,Robert Turner,rturner,Compliance Officer,"{""permissions"":[""audit_records""],""goals"":[""ensure policy compliance""],""common_questions"":[""How do I check violations?"",""How do I report issues?""],""systems_used"":[""compliance_system""],""tone_preference"":""formal"",""profile"":{""department"":""Compliance"",""access_level"":""High""}}"
+=======
+username,password,role,clearance
+john@uni.atlanta.edu,123,Student,student
+advisor@uni.atlanta.edu,advisor123,Advisor,advisor
+admin@uni.atlanta.edu,admin123,Administrator,administrator
+>>>>>>> Stashed changes
