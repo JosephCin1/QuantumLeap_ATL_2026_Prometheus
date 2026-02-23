@@ -69,6 +69,12 @@ if (!userRaw) {
 } else {
   const user = JSON.parse(userRaw);
   clearanceEl.textContent = `Logged in as ${user.username}. Role: ${user.role}. Clearance: ${user.clearance}.`;
+
+  // Only show settings for administrators
+  if (user.role.toLowerCase() !== 'administrator') {
+    settingsToggle.style.display = 'none';
+    settingsPanel.hidden = true;
+  }
 }
 
 function parseCsvLine(line) {
@@ -319,6 +325,12 @@ chatForm.addEventListener('submit', (event) => {
   chatInput.value = '';
 });
 
-renderRolePrivileges();
-renderIntegrations();
-loadDefaultAuditLog();
+// Only initialize admin features if user is an administrator
+if (userRaw) {
+  const user = JSON.parse(userRaw);
+  if (user.role.toLowerCase() === 'administrator') {
+    renderRolePrivileges();
+    renderIntegrations();
+    loadDefaultAuditLog();
+  }
+}
