@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICCP Login</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="card auth-card apple-login">
+        <div class="apple-header">
+          <h1>Quantum Leap 2026</h1>
+          <p class="subtitle">ICCP Secure Access</p>
+        </div>
+
+        <section id="login-view" class="auth-view active" aria-live="polite">
+          <form id="login-form" class="form apple-form" novalidate>
+            <div class="form-group">
+              <label for="username">University Email</label>
+              <input type="email" id="username" name="username" placeholder="john@campus.ce.edu" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="••••••••" required />
+            </div>
+
+            <button type="submit" class="apple-btn apple-btn-primary">Sign In</button>
+          </form>
+          <p id="status" class="status" aria-live="polite"></p>
+        </section>
+
+        <div class="auth-tabs apple-tabs" role="tablist" aria-label="Authentication options">
+          <button type="button" class="tab-btn active" data-view="login-view">Sign In</button>
+          <button type="button" class="tab-btn" data-view="signup-view">Create Account</button>
+          <button type="button" class="tab-btn" data-view="reset-view">Reset Password</button>
+        </div>
+
+        <section id="signup-view" class="auth-view" aria-live="polite">
+          <form id="signup-form" class="form apple-form" novalidate>
+            <div class="form-group">
+              <label for="signup-username">Username</label>
+              <input type="text" id="signup-username" placeholder="john" minlength="3" required />
+              <small class="hint">At least 3 characters</small>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-company">Company</label>
+              <select id="signup-company" required>
+                <option value="">Select company</option>
+                <option value="campus">CAMPUS CE</option>
+                <option value="paymentus">PAYMENTUS</option>
+                <option value="ellucian">ELLUCIAN</option>
+                <option value="socure">SOCURE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" minlength="8" required />
+              <small class="hint">8+ characters with uppercase, lowercase, number, and symbol</small>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm">Confirm Password</label>
+              <input type="password" id="signup-confirm" required />
+            </div>
+
+            <button type="submit" class="apple-btn apple-btn-primary">Create Account</button>
+          </form>
+          <p id="signup-status" class="status" aria-live="polite"></p>
+          <p id="generated-email" class="generated-email"></p>
+        </section>
+
+        <section id="reset-view" class="auth-view" aria-live="polite">
+          <form id="reset-form" class="form apple-form" novalidate>
+            <div class="form-group">
+              <label for="reset-email">Enter your university email</label>
+              <input type="email" id="reset-email" placeholder="john@campus.ce.edu" required />
+            </div>
+            <button type="submit" class="apple-btn apple-btn-primary">Send Reset Link</button>
+          </form>
+
+          <div id="reset-confirmation" class="apple-confirmation" hidden>
+            <h2>Check your email</h2>
+            <p>A password reset link has been sent to your email</p>
+          </div>
+          <p id="reset-status" class="status" aria-live="polite"></p>
+        </section>
+
+        <div class="apple-divider"></div>
+
+        <details class="apple-details">
+          <summary>Demo Credentials</summary>
+          <div class="demo-list">
+            <div class="demo-item">
+              <span class="demo-label">Student</span>
+              <span class="demo-value">john.doe@campus.ce.edu / Student@123</span>
+            </div>
+            <div class="demo-item">
+              <span class="demo-label">Faculty</span>
+              <span class="demo-value">alan.richards@paymentus.edu / Faculty@123</span>
+            </div>
+            <div class="demo-item">
+              <span class="demo-label">Administrator</span>
+              <span class="demo-value">susan.carter@lightleap.ai / Admin@123</span>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <script src="login.js" defer></script>
+  </body>
+</html>

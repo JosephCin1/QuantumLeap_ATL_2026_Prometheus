@@ -1,0 +1,18 @@
+UserID,TransactionID,Input,Output,Role,Privileges
+1001,TXN0001,"What is my GPA?","Your current GPA is 3.45.",Student,Grades
+1002,TXN0002,"Register me for CS101.","You have been successfully registered for CS101.",Student,Courses
+1003,TXN0003,"When is my next exam?","Your next exam is on March 5th at 10:00 AM.",Student,Courses
+1004,TXN0004,"Submit assignment for Biology 201.","Your assignment has been submitted successfully.",Student,Documents
+1005,TXN0005,"Who is my advisor?","Your assigned advisor is Aisha Patel.",Student,Documents
+1006,TXN0006,"Show me my course schedule.","Your schedule: CS101 Mon/Wed 9-10:30 AM, Math201 Tue/Thu 11-12:30 PM.",Student,Courses
+1007,TXN0007,"Change major to Data Science.","Your major has been updated to Data Science.",Student,Courses
+1008,TXN0008,"Request transcript.","Your transcript request has been submitted.",Student,Transcript
+2001,TXN0009,"Enter grades for CS101.","Grades for CS101 have been successfully recorded.",Faculty,Grades
+2002,TXN0010,"Create new assignment for Math201.","Assignment created and visible to students.",Faculty,Courses
+2003,TXN0011,"Mark attendance for IT301.","Attendance has been successfully updated.",Faculty,Attendance
+2004,TXN0012,"Message all students in CS101.","Your message has been sent to all enrolled students.",Faculty,Courses
+3001,TXN0013,"Verify enrollment for John Doe.","Enrollment for John Doe is verified.",Administrator,Enrollment
+3002,TXN0014,"Process application for Jane Smith.","Application has been approved and updated.",Administrator,Enrollment
+3003,TXN0015,"Update payroll for staff member.","Payroll record has been updated successfully.",Administrator,Payroll
+3004,TXN0016,"Generate transcript for Michael Brown.","Transcript has been generated and sent.",Administrator,Transcript
+3005,TXN0017,"Remove hold from student account.","Hold removed successfully.",Administrator,Enrollment
