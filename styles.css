@@ -14,6 +14,23 @@ body {
   color: #0f172a;
 }
 
+body[data-text-size='small'] {
+  font-size: 14px;
+}
+
+body[data-text-size='medium'] {
+  font-size: 16px;
+}
+
+body[data-text-size='large'] {
+  font-size: 18px;
+}
+
+body.theme-dark {
+  background: linear-gradient(180deg, #020617, #0f172a);
+  color: #e2e8f0;
+}
+
 .shell {
   min-height: 100vh;
   display: grid;
@@ -22,12 +39,22 @@ body {
 }
 
 .card {
-  width: min(440px, 100%);
+  width: min(720px, 100%);
   background: #fff;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   padding: 24px;
+}
+
+.theme-dark .card {
+  background: #111827;
+  border-color: #334155;
+  box-shadow: none;
+}
+
+.auth-card {
+  width: min(520px, 100%);
 }
 
 h1 {
@@ -38,6 +65,13 @@ h1 {
 .subtitle {
   margin: 8px 0 20px;
   color: #475569;
+}
+
+.theme-dark .subtitle,
+.theme-dark label,
+.theme-dark details,
+.theme-dark .hint {
+  color: #cbd5e1;
 }
 
 .form,
@@ -56,12 +90,20 @@ label {
 }
 
 input,
-button {
+button,
+select {
   border-radius: 10px;
   border: 1px solid #cbd5e1;
   padding: 10px 12px;
   font-size: 1rem;
   font-family: inherit;
+}
+
+.theme-dark input,
+.theme-dark select {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #475569;
 }
 
 button {
@@ -100,6 +142,11 @@ button:hover {
   margin-bottom: 12px;
 }
 
+.theme-dark .chat-window {
+  background: #0f172a;
+  border-color: #334155;
+}
+
 .bubble {
   padding: 10px 12px;
   border-radius: 10px;
@@ -110,13 +157,129 @@ button:hover {
 .bubble.user {
   background: #dbeafe;
   margin-left: auto;
+  color: #0f172a;
 }
 
 .bubble.bot {
   background: #e2e8f0;
+  color: #0f172a;
 }
 
 details {
   margin-top: 14px;
   color: #334155;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.tab-btn.active {
+  background: #0f172a;
+  color: #fff;
+}
+
+.auth-view {
+  display: none;
+}
+
+.auth-view.active {
+  display: block;
+}
+
+.hint {
+  margin-top: -6px;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.generated-email {
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.reset-confirmation {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+
+.reset-confirmation h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.icon-btn {
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.settings-panel {
+  margin: 8px 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.theme-dark .settings-panel {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.settings-panel h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.settings-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.settings-section:first-of-type {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.settings-section h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.inline-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.integration-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
 }

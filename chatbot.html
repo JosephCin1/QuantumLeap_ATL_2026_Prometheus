@@ -8,9 +8,55 @@
   </head>
   <body>
     <main class="shell">
-      <section class="card">
-        <h1>ICCP Chatbot</h1>
-        <p id="clearance" class="subtitle"></p>
+      <section class="card app-card">
+        <header class="app-header">
+          <div>
+            <h1>ICCP Chatbot</h1>
+            <p id="clearance" class="subtitle"></p>
+          </div>
+          <button id="settings-toggle" class="icon-btn" type="button" aria-label="Open settings">⚙️</button>
+        </header>
+
+        <aside id="settings-panel" class="settings-panel" hidden>
+          <h2>Settings</h2>
+
+          <section class="settings-section">
+            <h3>Basic Preferences</h3>
+            <label class="inline-control">
+              <span>Dark mode</span>
+              <input id="dark-mode-toggle" type="checkbox" />
+            </label>
+
+            <label for="text-size">Text size</label>
+            <select id="text-size">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </section>
+
+          <section id="admin-settings" class="settings-section" hidden>
+            <h3>Administrator ICCP</h3>
+            <label for="iccp-role">Role Profile</label>
+            <select id="iccp-role">
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+              <option value="staff">Staff</option>
+            </select>
+
+            <div id="iccp-permissions" class="permissions-grid"></div>
+          </section>
+
+          <section class="settings-section">
+            <h3>Integrations</h3>
+            <ul class="integration-list">
+              <li><strong>CAMPUS CE</strong> — API: CAMPUS-API-2244 / Secret: campus-secret-1122</li>
+              <li><strong>PAYMENTUS</strong> — API: PAY-API-7744 / Secret: paymentus-secret-3119</li>
+              <li><strong>ELLUCIAN</strong> — API: ELLUCIAN-API-0093 / Secret: ellucian-secret-5561</li>
+              <li><strong>SOCURE</strong> — API: SOCURE-API-4213 / Secret: socure-secret-1188</li>
+            </ul>
+          </section>
+        </aside>
 
         <div class="chat-window" id="chat-window">
           <div class="bubble bot">Welcome. Ask about your allowed resources.</div>
