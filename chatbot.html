@@ -7,66 +7,25 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="shell">
+    <main class="shell shell-chat">
       <section class="card app-card">
         <header class="app-header">
           <div>
             <h1>ICCP Chatbot</h1>
             <p id="clearance" class="subtitle"></p>
           </div>
-          <button id="settings-toggle" class="icon-btn" type="button" aria-label="Open settings">⚙️</button>
+          <button id="settings-toggle" class="icon-btn" type="button" aria-label="Open settings">Settings</button>
         </header>
 
         <aside id="settings-panel" class="settings-panel" hidden>
-          <h2>Settings</h2>
-
-          <section class="settings-section">
-            <h3>Basic Preferences</h3>
-            <label class="inline-control">
-              <span>Dark mode</span>
-              <input id="dark-mode-toggle" type="checkbox" />
-            </label>
-
-            <label for="text-size">Text size</label>
-            <select id="text-size">
-              <option value="small">Small</option>
-              <option value="medium" selected>Medium</option>
-              <option value="large">Large</option>
-            </select>
-          </section>
-
-          <section id="admin-settings" class="settings-section" hidden>
-            <h3>Administrator ICCP</h3>
-            <label for="iccp-role">Role Profile</label>
-            <select id="iccp-role">
-              <option value="student">Student</option>
-              <option value="faculty">Faculty</option>
-              <option value="staff">Staff</option>
-            </select>
-
-            <div id="iccp-permissions" class="permissions-grid"></div>
-
-            <hr />
-            <h3>Audit Log</h3>
-            <button id="audit-log-btn" type="button" class="btn-secondary">View Audit Log</button>
-            <div id="audit-log-container" class="audit-log-container" hidden>
-              <div class="audit-log-header">
-                <h4>User Transaction Audit</h4>
-                <button id="close-audit-btn" type="button" class="close-btn">✕</button>
-              </div>
-              <div id="audit-log-table" class="audit-log-table"></div>
-            </div>
-          </section>
-
-          <section class="settings-section">
-            <h3>Integrations</h3>
-            <ul class="integration-list">
-              <li><strong>CAMPUS CE</strong> — API: CAMPUS-API-2244 / Secret: campus-secret-1122</li>
-              <li><strong>PAYMENTUS</strong> — API: PAY-API-7744 / Secret: paymentus-secret-3119</li>
-              <li><strong>ELLUCIAN</strong> — API: ELLUCIAN-API-0093 / Secret: ellucian-secret-5561</li>
-              <li><strong>SOCURE</strong> — API: SOCURE-API-4213 / Secret: socure-secret-1188</li>
-            </ul>
-          </section>
+          <h2>Administrator Settings</h2>
+          <p class="settings-intro">Select a section to open in a separate Apple-style panel.</p>
+          <div class="settings-launch-grid">
+            <button class="settings-launch-btn" type="button" data-window="basic-modal">Basic Preferences</button>
+            <button class="settings-launch-btn" type="button" data-window="privileges-modal">Privileges</button>
+            <button class="settings-launch-btn" type="button" data-window="audit-modal">Audit Log</button>
+            <button class="settings-launch-btn" type="button" data-window="integrations-modal">Integrations</button>
+          </div>
         </aside>
 
         <div class="chat-window" id="chat-window">
@@ -79,6 +38,70 @@
         </form>
       </section>
     </main>
+
+    <div id="settings-modal-root">
+      <section id="basic-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card">
+          <header class="modal-header">
+            <h3>Basic Preferences</h3>
+            <button class="close-btn" type="button" data-close-modal aria-label="Close">X</button>
+          </header>
+          <div class="modal-content">
+            <label class="apple-toggle-row">
+              <span>Dark mode</span>
+              <input id="dark-mode-toggle" class="apple-toggle" type="checkbox" />
+            </label>
+
+            <label for="text-size">Text size</label>
+            <select id="text-size">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </article>
+      </section>
+
+      <section id="privileges-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card modal-card-wide">
+          <header class="modal-header">
+            <h3>Privileges by Role</h3>
+            <button class="close-btn" type="button" data-close-modal aria-label="Close">X</button>
+          </header>
+          <div id="role-privileges-grid" class="role-privileges-grid"></div>
+        </article>
+      </section>
+
+      <section id="audit-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card modal-card-wide">
+          <header class="modal-header">
+            <h3>Audit Log Statements</h3>
+            <button class="close-btn" type="button" data-close-modal aria-label="Close">X</button>
+          </header>
+          <div class="modal-content">
+            <div class="audit-toolbar">
+              <button id="import-audit-btn" class="btn-secondary" type="button">Import CSV</button>
+              <input id="audit-file-input" type="file" accept=".csv" hidden />
+            </div>
+            <div id="audit-log-statements" class="audit-log-statements"></div>
+          </div>
+        </article>
+      </section>
+
+      <section id="integrations-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card">
+          <header class="modal-header">
+            <h3>Integrations</h3>
+            <button class="close-btn" type="button" data-close-modal aria-label="Close">X</button>
+          </header>
+          <div id="integrations-list" class="integration-cards"></div>
+        </article>
+      </section>
+    </div>
 
     <script src="chatbot.js" defer></script>
   </body>
