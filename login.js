@@ -19,9 +19,26 @@ const COMPANY_EMAIL_MAP = {
 };
 
 const STATIC_PASSWORDS = {
-  'john@campus.ce.edu': '123',
-  'faculty@paymentus.edu': '123',
-  'admin@ellucian.edu': '123'
+  'john.doe@campus.ce.edu': 'Student@123',
+  'aisha.patel@campus.ce.edu': 'Student@123',
+  'michael.brown@campus.ce.edu': 'Student@123',
+  'sophia.nguyen@campus.ce.edu': 'Student@123',
+  'carlos.martinez@campus.ce.edu': 'Student@123',
+  'lily.chen@campus.ce.edu': 'Student@123',
+  'noah.wilson@campus.ce.edu': 'Student@123',
+  'emma.rodriguez@campus.ce.edu': 'Student@123',
+  'alan.richards@paymentus.edu': 'Faculty@123',
+  'melissa.grant@paymentus.edu': 'Faculty@123',
+  'daniel.park@paymentus.edu': 'Faculty@123',
+  'rebecca.collins@paymentus.edu': 'Faculty@123',
+  'brian.cooper@paymentus.edu': 'Faculty@123',
+  'angela.morris@paymentus.edu': 'Faculty@123',
+  'susan.carter@lightleap.ai': 'Admin@123',
+  'michael.reynolds@lightleap.ai': 'Admin@123',
+  'angela.watson@lightleap.ai': 'Admin@123',
+  'daniel.price@lightleap.ai': 'Admin@123',
+  'linda.morales@lightleap.ai': 'Admin@123',
+  'robert.turner@lightleap.ai': 'Admin@123'
 };
 
 function parseCsvLine(line) {
@@ -53,28 +70,51 @@ function parseCsvLine(line) {
 }
 
 async function loadUsersFromCsv() {
-  const response = await fetch('users.csv', { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error('Could not load users.csv');
+  const [credentialsResponse, contextResponse] = await Promise.all([
+    fetch('user_credentials.csv', { cache: 'no-store' }),
+    fetch('users_context.csv', { cache: 'no-store' })
+  ]);
+
+  if (!credentialsResponse.ok || !contextResponse.ok) {
+    throw new Error('Could not load user files');
   }
 
-  const csvText = await response.text();
-  const lines = csvText.trim().split('\n');
-  const headers = parseCsvLine(lines[0]);
+  const credentialsCsv = await credentialsResponse.text();
+  const contextCsv = await contextResponse.text();
 
-  return lines.slice(1).map((line) => {
+  const credentialLines = credentialsCsv.trim().split('\n');
+  const credentialHeaders = parseCsvLine(credentialLines[0]);
+  const credentials = {};
+
+  credentialLines.slice(1).forEach((line) => {
     const row = parseCsvLine(line);
     const record = {};
-    headers.forEach((header, index) => {
+    credentialHeaders.forEach((header, index) => {
+      record[header] = row[index] || '';
+    });
+    if (record.Email) {
+      credentials[record.Email.toLowerCase()] = record;
+    }
+  });
+
+  const contextLines = contextCsv.trim().split('\n');
+  const contextHeaders = parseCsvLine(contextLines[0]);
+
+  return contextLines.slice(1).map((line) => {
+    const row = parseCsvLine(line);
+    const record = {};
+    contextHeaders.forEach((header, index) => {
       record[header] = row[index] || '';
     });
 
-    const username = (record.username || '').toLowerCase().includes('@')
-      ? record.username.toLowerCase()
-      : `${record.username.toLowerCase()}@uni.atlanta.edu`;
+    const userIdStr = record.UserID || '';
+    const email = Object.keys(credentials).find((email) => {
+      const cred = credentials[email];
+      return cred.UserID === userIdStr;
+    });
 
     return {
-      username,
+      username: email || record.username,
       role: record.role || 'Student',
       roleOnProject: record.role_on_project || 'End User',
       clearance: record.role || 'Student'

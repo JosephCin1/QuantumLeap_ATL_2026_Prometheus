@@ -283,3 +283,134 @@ details {
   display: grid;
   gap: 8px;
 }
+
+.btn-secondary {
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background: #1e293b;
+}
+
+.theme-dark .btn-secondary {
+  background: #1e293b;
+}
+
+.theme-dark .btn-secondary:hover {
+  background: #334155;
+}
+
+.audit-log-container {
+  margin-top: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  overflow: hidden;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.audit-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f1f5f9;
+}
+
+.audit-log-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #0f172a;
+}
+
+.theme-dark .close-btn:hover {
+  color: #e2e8f0;
+}
+
+.audit-log-table {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px;
+}
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.audit-table thead {
+  background: #f1f5f9;
+  position: sticky;
+  top: 0;
+}
+
+.audit-table th {
+  padding: 8px 6px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.audit-table td {
+  padding: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.audit-table tbody tr:hover {
+  background: #eff6ff;
+}
+
+.theme-dark .audit-log-container {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.theme-dark .audit-log-header {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.theme-dark .audit-table thead {
+  background: #0f172a;
+}
+
+.theme-dark .audit-table th {
+  border-color: #334155;
+}
+
+.theme-dark .audit-table td {
+  border-color: #334155;
+}
+
+.theme-dark .audit-table tbody tr:hover {
+  background: #1e3a4c;
+}

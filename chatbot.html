@@ -45,6 +45,17 @@
             </select>
 
             <div id="iccp-permissions" class="permissions-grid"></div>
+
+            <hr />
+            <h3>Audit Log</h3>
+            <button id="audit-log-btn" type="button" class="btn-secondary">View Audit Log</button>
+            <div id="audit-log-container" class="audit-log-container" hidden>
+              <div class="audit-log-header">
+                <h4>User Transaction Audit</h4>
+                <button id="close-audit-btn" type="button" class="close-btn">✕</button>
+              </div>
+              <div id="audit-log-table" class="audit-log-table"></div>
+            </div>
           </section>
 
           <section class="settings-section">
