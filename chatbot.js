@@ -201,6 +201,7 @@ function openModal(modalId) {
 function closeModals() {
   settingsModals.forEach((modal) => {
     modal.hidden = true;
+    modal.style.display = 'none';
   });
 }
 
@@ -284,7 +285,10 @@ settingsLaunchButtons.forEach((button) => {
 });
 
 closeModalButtons.forEach((button) => {
-  button.addEventListener('click', closeModals);
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    closeModals();
+  });
 });
 
 document.addEventListener('keydown', (event) => {
