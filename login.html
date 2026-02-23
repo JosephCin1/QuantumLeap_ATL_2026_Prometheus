@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+s<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,24 +12,24 @@
         <h1>Quantum Leap 2026</h1>
         <p class="subtitle">ICCP Secure Access</p>
 
-        <div class="auth-tabs" role="tablist" aria-label="Authentication options">
-          <button type="button" class="tab-btn active" data-view="login-view">Log In</button>
-          <button type="button" class="tab-btn" data-view="signup-view">Sign Up</button>
-          <button type="button" class="tab-btn" data-view="reset-view">Forgot Password</button>
-        </div>
-
         <section id="login-view" class="auth-view active" aria-live="polite">
           <form id="login-form" class="form" novalidate>
             <label for="username">University Email</label>
             <input type="email" id="username" name="username" placeholder="john@campus.ce.edu" required />
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="••••" required />
+            <input type="password" id="password" name="password" placeholder="password" required />
 
             <button type="submit">Log In</button>
           </form>
           <p id="status" class="status" aria-live="polite"></p>
         </section>
+
+        <div class="auth-tabs auth-tabs-below" role="tablist" aria-label="Authentication options">
+          <button type="button" class="tab-btn active" data-view="login-view">Log In</button>
+          <button type="button" class="tab-btn" data-view="signup-view">Sign Up</button>
+          <button type="button" class="tab-btn" data-view="reset-view">Forgot Password</button>
+        </div>
 
         <section id="signup-view" class="auth-view" aria-live="polite">
           <form id="signup-form" class="form" novalidate>
@@ -67,7 +67,7 @@
           </form>
 
           <div id="reset-confirmation" class="reset-confirmation" hidden>
-            <h2>passowrd reset sent</h2>
+            <h2>Password reset sent</h2>
             <p>A confirmation email has been sent to your account.</p>
           </div>
           <p id="reset-status" class="status" aria-live="polite"></p>
