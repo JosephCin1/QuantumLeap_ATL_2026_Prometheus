@@ -235,8 +235,13 @@ function renderAuditStatements(rows, headers) {
   auditLogStatements.innerHTML = '';
 
   if (!rows.length) {
-    auditLogStatements.textContent = 'No audit entries were found in the selected CSV.';
+    auditLogStatements.textContent = 'No audit entries found.';
     return;
+  }
+
+  // If headers not supplied, derive from first row's keys (JSON data)
+  if (!headers || !headers.length) {
+    headers = Object.keys(rows[0]);
   }
 
   const tableWrap = document.createElement('div');
@@ -259,7 +264,10 @@ function renderAuditStatements(rows, headers) {
     const tr = document.createElement('tr');
     headers.forEach((header) => {
       const td = document.createElement('td');
-      td.textContent = row[header] || '-';
+      const val = row[header];
+      // Stringify objects/arrays for display
+      td.textContent = (val === null || val === undefined) ? '-'
+        : (typeof val === 'object') ? JSON.stringify(val) : String(val);
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -271,17 +279,18 @@ function renderAuditStatements(rows, headers) {
 }
 
 async function loadDefaultAuditLog() {
-  if (auditLoaded) return;
   if (!auditLogStatements) return;
+  auditLogStatements.innerHTML = '<em>Loading audit logs from backend…</em>';
   try {
-    const response = await fetch('user_transactions.csv', { cache: 'no-store' });
-    if (!response.ok) throw new Error('Default audit file not found');
-    const csvText = await response.text();
-    const { headers, rows } = parseCsvText(csvText);
-    renderAuditStatements(rows, headers);
+    const response = await fetch('http://localhost:3001/iccp/audit', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`Backend returned ${response.status}`);
+    const { logs } = await response.json();
+    renderAuditStatements(logs || []);
     auditLoaded = true;
   } catch (error) {
-    auditLogStatements.textContent = 'Import a CSV file to view audit statements.';
+    console.error('Audit fetch failed:', error);
+    auditLogStatements.textContent = 'Could not load audit logs from backend. You can import a CSV file instead.';
+    auditLoaded = false;
   }
 }
 
