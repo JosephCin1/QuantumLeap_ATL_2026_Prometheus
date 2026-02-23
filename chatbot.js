@@ -281,6 +281,13 @@ closeModalButtons.forEach((button) => {
   button.addEventListener('click', closeModals);
 });
 
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closeModals();
+    settingsPanel.hidden = true;
+  }
+});
+
 darkModeToggle.addEventListener('change', () => {
   document.body.classList.toggle('theme-dark', darkModeToggle.checked);
 });
