@@ -101,7 +101,13 @@ const policies = JSON.parse(
 // Allowed questions per role – anything else is denied
 // ---------------------------------------------------------------------------
 function normalizePrompt(text) {
-  return (text || "").trim().toLowerCase().replace(/\s+/g, " ");
+  return (text || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/\s*[.?!,]+\s*$/g, "")   // trailing punctuation
+    .replace(/^\s*[.?!,]+\s*/g, "")   // leading punctuation
+    .trim();
 }
 
 const ALLOWED_STUDENT_PROMPTS = [
@@ -125,8 +131,8 @@ const ALLOWED_FACULTY_PROMPTS = [
 
 function isAllowedPrompt(role, normalizedPrompt) {
   if (role === "Administrator" || role === "Staff") return true;
-  if (role === "Student") return ALLOWED_STUDENT_PROMPTS.includes(normalizedPrompt);
-  if (role === "Faculty") return ALLOWED_FACULTY_PROMPTS.includes(normalizedPrompt);
+  if (role === "Student") return ALLOWED_STUDENT_PROMPTS.some((p) => normalizedPrompt === p || normalizedPrompt.includes(p));
+  if (role === "Faculty") return ALLOWED_FACULTY_PROMPTS.some((p) => normalizedPrompt === p || normalizedPrompt.includes(p));
   return false;
 }
 
