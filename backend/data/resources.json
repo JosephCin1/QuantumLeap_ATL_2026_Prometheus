@@ -13,7 +13,7 @@
     "origin": "CSV:user_transactions.csv",
     "sensitivity": "STANDARD",
     "ttl_seconds": 300,
-    "allowed_roles": ["Staff", "Faculty", "Administrator"],
+    "allowed_roles": ["Student", "Staff", "Faculty", "Administrator"],
     "mask_fields": [],
     "description": "Past queries and AI responses per user"
   },

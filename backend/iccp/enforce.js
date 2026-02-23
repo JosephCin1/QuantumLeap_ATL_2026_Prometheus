@@ -98,6 +98,45 @@ const policies = JSON.parse(
 );
 
 // ---------------------------------------------------------------------------
+// Allowed questions per role – anything else is denied
+// ---------------------------------------------------------------------------
+function normalizePrompt(text) {
+  return (text || "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+const ALLOWED_STUDENT_PROMPTS = [
+  "my grades",
+  "what is my gpa",
+  "what's my gpa",
+  "whats my gpa",
+  "show my grades",
+];
+
+const ALLOWED_FACULTY_PROMPTS = [
+  "how many students",
+  "show classes",
+  "my classes",
+  "show my classes",
+  "enter grades for cs101",
+  "create new assignment for math201",
+  "mark attendance for it301",
+  "message all students in cs101",
+];
+
+function isAllowedPrompt(role, normalizedPrompt) {
+  if (role === "Administrator" || role === "Staff") return true;
+  if (role === "Student") return ALLOWED_STUDENT_PROMPTS.includes(normalizedPrompt);
+  if (role === "Faculty") return ALLOWED_FACULTY_PROMPTS.includes(normalizedPrompt);
+  return false;
+}
+
+function getAllowedPromptsForRole(role) {
+  if (role === "Student") return ["My grades", "What is my GPA?"];
+  if (role === "Faculty") return ["How many students?", "Show classes", "My classes", "Enter grades for CS101", "Create new assignment for Math201", "Mark attendance for IT301", "Message all students in CS101"];
+  return [];
+}
+
+// ---------------------------------------------------------------------------
 // Main enforcement function
 // ---------------------------------------------------------------------------
 function enforce(userId, prompt, requestedResources) {
@@ -119,6 +158,18 @@ function enforce(userId, prompt, requestedResources) {
     institution: user.institution,
     permissions: user.context.permissions || [],
   };
+
+  // ── 1b. Role-based allowed questions: Student and Faculty only allow listed prompts
+  const normalizedPrompt = normalizePrompt(prompt);
+  if (!isAllowedPrompt(user.role, normalizedPrompt)) {
+    const allowedList = getAllowedPromptsForRole(user.role);
+    const reason = allowedList.length
+      ? `I can only help with a few things right now. Here's what you can ask: ${allowedList.join("; ")}`
+      : `I'm not able to help with that question.`;
+    logEvent({ trace_id, username: user.username, role: user.role, requested_resources: requestedResources, decision: "DENY", reason });
+    const contextPacket = buildContextPacket({ trace_id, identityScope, authorizedResources: [], contextConstraints: ["allowed_questions_only"] });
+    return { status: 200, body: { trace_id, decision: "DENY", reason, context_packet: contextPacket, answer: null } };
+  }
 
   // ── 2. Parse requested resources ("resource_id" or "resource_id:subject_id")
   const parsed = requestedResources.map((r) => {

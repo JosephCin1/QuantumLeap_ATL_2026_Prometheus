@@ -72,24 +72,30 @@ if (!userRaw) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function inferResources(message, userId) {
-  var lower = message.toLowerCase();
+  var lower = message.toLowerCase().replace(/\s+/g, ' ').trim();
 
-  // Transaction / history keywords → user_transactions
+  // Student-allowed only: My grades, What is my GPA? (backend denies other student questions)
+  if (/\b(my grades|grades|gpa|my gpa|show my grades|what is my gpa|what's my gpa|whats my gpa)\b/.test(lower)) {
+    return ['user_transactions:' + userId, 'users_context:' + userId];
+  }
+
+  // Faculty-allowed: how many students, show classes, my classes, enter grades, etc. (backend denies other faculty questions)
+  if (/\b(how many students|show classes|my classes|show my classes|enter grades|create new assignment|mark attendance|message all students)\b/.test(lower)) {
+    return ['user_transactions:' + userId, 'users_context:' + userId];
+  }
+
+  // Admin/Staff: transaction history, context, profile (admin kept same – no question allowlist)
   if (/\b(transaction|transactions|history|payment|payments|purchase|purchases|ledger|spending)\b/.test(lower)) {
     return ['user_transactions:' + userId];
   }
-
-  // Context / profile keywords → users_context
   if (/\b(context|profile|who am i|my info|about me|permissions|goals|my data|my record|my account)\b/.test(lower)) {
     return ['users_context:' + userId];
   }
-
-  // Both
   if (/\b(everything|all data|full report|all my)\b/.test(lower)) {
     return ['users_context:' + userId, 'user_transactions:' + userId];
   }
 
-  // General chat — no data needed
+  // Anything else → no resources (backend will deny for Student/Faculty; Admin may get empty context)
   return [];
 }
 
@@ -197,11 +203,7 @@ async function sendMessage() {
     }
 
     if (data.decision === 'DENY') {
-      addBubble(
-        '🚫 Access Denied\n' + data.reason + '\n\nTrace: ' + data.trace_id,
-        'bot',
-        'deny'
-      );
+      addBubble(data.reason || "I can't help with that right now.", 'bot');
     } else if (data.decision === 'ALLOW') {
       addBubble(data.answer || '(No response content)', 'bot');
     } else {
