@@ -1,355 +1,377 @@
-// ═══════════════════════════════════════════════════════════════════════════
-//  ICCP Chatbot – vanilla JS client for the Node/Express ICCP backend
-// ═══════════════════════════════════════════════════════════════════════════
+const userRaw = sessionStorage.getItem('currentUser');
 
-// ─── Config ──────────────────────────────────────────────────────────────
-const API_BASE = 'http://localhost:3001';
+const clearanceEl = document.getElementById('clearance');
+const chatWindow = document.getElementById('chat-window');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
 
-// ─── DOM refs ────────────────────────────────────────────────────────────
-const userIdInput    = document.getElementById('userId');
-const idStatus       = document.getElementById('id-status');
-const clearanceEl    = document.getElementById('clearance');
-const chatWindow     = document.getElementById('chat-window');
-const chatForm       = document.getElementById('chat-form');
-const chatInput      = document.getElementById('chat-input');
-const sendBtn        = document.getElementById('sendBtn');
-const debugPanel     = document.getElementById('debugPanel');
+const settingsToggle = document.getElementById('settings-toggle');
+const settingsPanel = document.getElementById('settings-panel');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+const textSizeSelect = document.getElementById('text-size');
+const rolePrivilegesGrid = document.getElementById('role-privileges-grid');
+const importAuditBtn = document.getElementById('import-audit-btn');
+const auditFileInput = document.getElementById('audit-file-input');
+const auditLogStatements = document.getElementById('audit-log-statements');
+const integrationsList = document.getElementById('integrations-list');
 
-// Settings (existing UI)
-const settingsToggle    = document.getElementById('settings-toggle');
-const settingsPanel     = document.getElementById('settings-panel');
-const darkModeToggle    = document.getElementById('dark-mode-toggle');
-const textSizeSelect    = document.getElementById('text-size');
-const adminSettings     = document.getElementById('admin-settings');
-const iccpRole          = document.getElementById('iccp-role');
-const iccpPermissions   = document.getElementById('iccp-permissions');
-const auditLogBtn       = document.getElementById('audit-log-btn');
-const auditLogContainer = document.getElementById('audit-log-container');
-const closeAuditBtn     = document.getElementById('close-audit-btn');
-const auditLogTable     = document.getElementById('audit-log-table');
+const settingsLaunchButtons = document.querySelectorAll('.settings-launch-btn');
+const settingsModals = document.querySelectorAll('.settings-modal');
+const closeModalButtons = document.querySelectorAll('[data-close-modal]');
+const integrationsLaunchBtn = document.querySelector('.settings-launch-btn[data-window="integrations-modal"]');
 
-// ─── Admin-panel role permissions (existing feature) ─────────────────────
 const rolePermissions = {
   student: [
-    { label: 'Student Grade', key: 'student_grade', enabled: true },
-    { label: 'Location',      key: 'location',      enabled: true },
-    { label: 'SSN',           key: 'ssn',           enabled: true }
-  ],
-  faculty: [
-    { label: 'Student Grade', key: 'student_grade', enabled: true },
-    { label: 'Location',      key: 'location',      enabled: true },
-    { label: 'SSN',           key: 'ssn',           enabled: false }
+    { label: 'Grades', key: 'grades', enabled: true },
+    { label: 'Transcript', key: 'transcript', enabled: true },
+    { label: 'Payroll', key: 'payroll', enabled: false }
   ],
   staff: [
-    { label: 'Student Grade', key: 'student_grade', enabled: true },
-    { label: 'Location',      key: 'location',      enabled: true },
-    { label: 'SSN',           key: 'ssn',           enabled: false }
+    { label: 'Grades', key: 'grades', enabled: true },
+    { label: 'Transcript', key: 'transcript', enabled: true },
+    { label: 'Payroll', key: 'payroll', enabled: true }
+  ],
+  faculty: [
+    { label: 'Grades', key: 'grades', enabled: true },
+    { label: 'Transcript', key: 'transcript', enabled: true },
+    { label: 'Payroll', key: 'payroll', enabled: true }
   ]
 };
 
-// ─── Session / identity ──────────────────────────────────────────────────
-const userRaw = sessionStorage.getItem('currentUser');
+const integrationConfig = [
+  { name: 'CAMPUS CE', apiKey: 'CAMPUS-API-2244', secret: 'campus-secret-1122' },
+  { name: 'PAYMENTUS', apiKey: 'PAY-API-7744', secret: 'paymentus-secret-3119' },
+  { name: 'ELLUCIAN', apiKey: 'ELLUCIAN-API-0093', secret: 'ellucian-secret-5561' },
+  { name: 'SOCURE', apiKey: 'SOCURE-API-4213', secret: 'socure-secret-1188' }
+];
+
+let currentUser = null;
+let isAdministrator = false;
+let canAccessSettings = false;
+let integrationsLoaded = false;
+let auditLoaded = false;
 
 if (!userRaw) {
-  // No login session → still let the page work (user types ID manually)
-  clearanceEl.textContent = 'Not logged in — enter a User ID below.';
+  window.location.href = 'login.html';
 } else {
-  const user = JSON.parse(userRaw);
-  clearanceEl.textContent =
-    'Logged in as ' + user.username + '. Role: ' + user.role + '. Clearance: ' + user.clearance + '.';
+  currentUser = JSON.parse(userRaw);
+  const normalizedRole = (currentUser.role || '').toLowerCase();
+  const settingsAllowedRoles = ['administrator', 'student', 'staff', 'faculty'];
+  isAdministrator = normalizedRole === 'administrator';
+  canAccessSettings = settingsAllowedRoles.includes(normalizedRole);
 
-  // Auto-populate the userId field with the login email
-  userIdInput.value = user.username;
+  if (clearanceEl) {
+    clearanceEl.textContent = `Logged in as ${currentUser.username}. Role: ${currentUser.role}. Clearance: ${currentUser.clearance}.`;
+  }
 
-  if (user.role.toLowerCase() === 'administrator') {
-    adminSettings.hidden = false;
-    renderIccpPermissions(iccpRole.value);
+  if (!canAccessSettings && settingsToggle && settingsPanel) {
+    settingsToggle.hidden = true;
+    settingsPanel.hidden = true;
+  }
+
+  if (!isAdministrator && integrationsLaunchBtn) {
+    integrationsLaunchBtn.hidden = true;
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Resource inference — determines requested_resources from user message
-// ═══════════════════════════════════════════════════════════════════════════
-
-function inferResources(message, userId) {
-  var lower = message.toLowerCase().replace(/\s+/g, ' ').trim();
-
-  // Student-allowed only: My grades, What is my GPA? (backend denies other student questions)
-  if (/\b(my grades|grades|gpa|my gpa|show my grades|what is my gpa|what's my gpa|whats my gpa)\b/.test(lower)) {
-    return ['user_transactions:' + userId, 'users_context:' + userId];
-  }
-
-  // Faculty-allowed: how many students, show classes, my classes, enter grades, etc. (backend denies other faculty questions)
-  if (/\b(how many students|show classes|my classes|show my classes|enter grades|create new assignment|mark attendance|message all students)\b/.test(lower)) {
-    return ['user_transactions:' + userId, 'users_context:' + userId];
-  }
-
-  // Admin/Staff: transaction history, context, profile (admin kept same – no question allowlist)
-  if (/\b(transaction|transactions|history|payment|payments|purchase|purchases|ledger|spending)\b/.test(lower)) {
-    return ['user_transactions:' + userId];
-  }
-  if (/\b(context|profile|who am i|my info|about me|permissions|goals|my data|my record|my account)\b/.test(lower)) {
-    return ['users_context:' + userId];
-  }
-  if (/\b(everything|all data|full report|all my)\b/.test(lower)) {
-    return ['users_context:' + userId, 'user_transactions:' + userId];
-  }
-
-  // Anything else → no resources (backend will deny for Student/Faculty; Admin may get empty context)
-  return [];
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  Chat bubbles
-// ═══════════════════════════════════════════════════════════════════════════
-
-function addBubble(text, speaker, extraClass) {
-  var bubble = document.createElement('div');
-  bubble.className = 'bubble ' + speaker + (extraClass ? ' ' + extraClass : '');
-
-  // Support basic newlines in text
-  text.split('\n').forEach(function (line, i) {
-    if (i > 0) bubble.appendChild(document.createElement('br'));
-    bubble.appendChild(document.createTextNode(line));
-  });
-
+function addBubble(text, speaker) {
+  if (!chatWindow) return;
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${speaker}`;
+  bubble.textContent = text;
   chatWindow.appendChild(bubble);
   chatWindow.scrollTop = chatWindow.scrollHeight;
-  return bubble;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Debug panel
-// ═══════════════════════════════════════════════════════════════════════════
+function parseCsvLine(line) {
+  const values = [];
+  let value = '';
+  let inQuotes = false;
 
-function updateDebug(data) {
-  var display = {
-    decision:       data.decision       || undefined,
-    trace_id:       data.trace_id       || undefined,
-    reason:         data.reason         || undefined,
-    context_packet: data.context_packet || undefined,
-    error:          data.error          || undefined
-  };
-  // Strip undefined keys
-  Object.keys(display).forEach(function (k) {
-    if (display[k] === undefined) delete display[k];
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+    if (char === '"') {
+      const next = line[i + 1];
+      if (inQuotes && next === '"') {
+        value += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      values.push(value.trim());
+      value = '';
+    } else {
+      value += char;
+    }
+  }
+  values.push(value.trim());
+  return values;
+}
+
+function parseCsvText(csvText) {
+  const lines = csvText
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2) {
+    return { headers: [], rows: [] };
+  }
+
+  const headers = parseCsvLine(lines[0]);
+  const rows = lines.slice(1).map((line) => {
+    const values = parseCsvLine(line);
+    const record = {};
+    headers.forEach((header, index) => {
+      record[header] = values[index] || '';
+    });
+    return record;
   });
-  debugPanel.textContent = JSON.stringify(display, null, 2);
+
+  return { headers, rows };
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Send message to ICCP backend
-// ═══════════════════════════════════════════════════════════════════════════
+function renderRolePrivileges() {
+  if (!rolePrivilegesGrid) return;
+  rolePrivilegesGrid.innerHTML = '';
+  const roles = ['student', 'staff', 'faculty'];
 
-var isSending = false;
+  roles.forEach((role) => {
+    const card = document.createElement('article');
+    card.className = 'role-card';
 
-async function sendMessage() {
-  if (isSending) return;
+    const heading = document.createElement('h4');
+    heading.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+    card.appendChild(heading);
 
-  var userId  = userIdInput.value.trim();
-  var message = chatInput.value.trim();
+    rolePermissions[role].forEach((permission) => {
+      const row = document.createElement('label');
+      row.className = 'role-item';
 
-  // Validation
-  if (!userId) {
-    addBubble('⚠️ Please enter your User ID above before sending.', 'bot', 'warn');
-    userIdInput.focus();
-    return;
-  }
-  if (!message) {
-    addBubble('⚠️ Please type a message.', 'bot', 'warn');
-    chatInput.focus();
-    return;
-  }
+      const textWrap = document.createElement('div');
+      textWrap.className = 'role-item-text';
 
-  // Show user bubble
-  addBubble(message, 'user');
-  chatInput.value = '';
+      const text = document.createElement('span');
+      text.textContent = permission.label;
 
-  // Determine resources
-  var requestedResources = inferResources(message, userId);
+      const state = document.createElement('small');
+      state.className = 'role-item-state';
+      state.textContent = permission.enabled ? 'Allow' : 'Disable';
 
-  // Show what we inferred (small tag)
-  if (requestedResources.length > 0) {
-    idStatus.textContent = 'Resources: ' + requestedResources.join(', ');
-  } else {
-    idStatus.textContent = 'General chat (no data resources)';
-  }
+      textWrap.append(text, state);
 
-  // Loading indicator
-  var loadingBubble = addBubble('Thinking…', 'bot', 'loading');
-  isSending = true;
-  sendBtn.disabled = true;
+      const toggle = document.createElement('input');
+      toggle.className = 'apple-toggle';
+      toggle.type = 'checkbox';
+      toggle.checked = permission.enabled;
+      toggle.addEventListener('change', () => {
+        permission.enabled = toggle.checked;
+        state.textContent = permission.enabled ? 'Allow' : 'Disable';
+      });
 
-  try {
-    var res = await fetch(API_BASE + '/iccp/query', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: userId,
-        prompt: message,
-        requested_resources: requestedResources
-      })
+      row.append(textWrap, toggle);
+      card.appendChild(row);
     });
 
-    loadingBubble.remove();
-
-    var data = await res.json();
-
-    if (data.error) {
-      // Backend returned an error (e.g. unknown user, missing fields)
-      addBubble('⚠️ ' + data.error, 'bot', 'error');
-      updateDebug(data);
-      return;
-    }
-
-    if (data.decision === 'DENY') {
-      addBubble(data.reason || "I can't help with that right now.", 'bot');
-    } else if (data.decision === 'ALLOW') {
-      addBubble(data.answer || '(No response content)', 'bot');
-    } else {
-      addBubble('Unexpected response from server.', 'bot', 'error');
-    }
-
-    updateDebug(data);
-
-  } catch (err) {
-    loadingBubble.remove();
-    addBubble(
-      '⚠️ Backend unreachable — make sure the server is running on ' + API_BASE,
-      'bot',
-      'error'
-    );
-    updateDebug({ error: err.message });
-  } finally {
-    isSending = false;
-    sendBtn.disabled = false;
-  }
+    rolePrivilegesGrid.appendChild(card);
+  });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Audit log – fetches from backend /iccp/audit
-// ═══════════════════════════════════════════════════════════════════════════
+function renderIntegrations() {
+  if (!integrationsList) return;
+  integrationsList.innerHTML = '';
 
-async function loadAuditLog() {
-  auditLogTable.textContent = 'Loading…';
-  try {
-    var res = await fetch(API_BASE + '/iccp/audit', { cache: 'no-store' });
-    if (!res.ok) throw new Error('Server returned ' + res.status);
+  integrationConfig.forEach((integration, index) => {
+    const card = document.createElement('article');
+    card.className = 'integration-card';
 
-    var data = await res.json();
-    var logs = data.logs || [];
+    const row = document.createElement('div');
+    row.className = 'integration-row';
 
-    if (logs.length === 0) {
-      auditLogTable.textContent = 'No audit entries yet.';
-      return;
-    }
+    const title = document.createElement('h4');
+    title.className = 'integration-title';
+    title.textContent = integration.name;
 
-    var headers = Object.keys(logs[0]);
-    displayAuditLog(logs, headers);
-  } catch (err) {
-    auditLogTable.textContent = 'Error loading audit log: ' + err.message;
-  }
+    const revealButton = document.createElement('button');
+    revealButton.className = 'btn-secondary';
+    revealButton.type = 'button';
+    revealButton.textContent = 'Reveal';
+
+    row.append(title, revealButton);
+    card.appendChild(row);
+
+    const fields = document.createElement('div');
+    fields.className = 'integration-fields';
+    fields.hidden = true;
+    fields.innerHTML = `
+      <label for="integration-username-${index}">Username</label>
+      <input id="integration-username-${index}" type="text" placeholder="integration username" />
+      <label for="integration-api-${index}">API Key</label>
+      <input id="integration-api-${index}" type="text" value="${integration.apiKey}" />
+      <label for="integration-secret-${index}">Secret</label>
+      <input id="integration-secret-${index}" type="password" value="${integration.secret}" />
+    `;
+
+    revealButton.addEventListener('click', () => {
+      const wasHidden = fields.hidden;
+      fields.hidden = !wasHidden;
+      revealButton.textContent = wasHidden ? 'Hide' : 'Reveal';
+    });
+
+    card.appendChild(fields);
+    integrationsList.appendChild(card);
+  });
 }
 
-function displayAuditLog(rows, headers) {
-  auditLogTable.innerHTML = '';
+function ensureIntegrationsLoaded() {
+  if (!isAdministrator || integrationsLoaded) return;
+  renderIntegrations();
+  integrationsLoaded = true;
+}
 
-  var table = document.createElement('table');
+function renderAuditStatements(rows, headers) {
+  if (!auditLogStatements) return;
+  auditLogStatements.innerHTML = '';
+
+  if (!rows.length) {
+    auditLogStatements.textContent = 'No audit entries were found in the selected CSV.';
+    return;
+  }
+
+  const tableWrap = document.createElement('div');
+  tableWrap.className = 'audit-table-wrap';
+
+  const table = document.createElement('table');
   table.className = 'audit-table';
 
-  var thead = document.createElement('thead');
-  var headerRow = document.createElement('tr');
-  headers.forEach(function (header) {
-    var th = document.createElement('th');
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  headers.forEach((header) => {
+    const th = document.createElement('th');
     th.textContent = header;
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
-  table.appendChild(thead);
 
-  var tbody = document.createElement('tbody');
-  rows.forEach(function (row) {
-    var tr = document.createElement('tr');
-    headers.forEach(function (header) {
-      var td = document.createElement('td');
-      var val = row[header];
-      // Pretty-print arrays
-      td.textContent = Array.isArray(val) ? val.join(', ') : (val || '');
+  const tbody = document.createElement('tbody');
+  rows.forEach((row) => {
+    const tr = document.createElement('tr');
+    headers.forEach((header) => {
+      const td = document.createElement('td');
+      td.textContent = row[header] || '-';
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
-  table.appendChild(tbody);
 
-  auditLogTable.appendChild(table);
+  table.append(thead, tbody);
+  tableWrap.appendChild(table);
+  auditLogStatements.appendChild(tableWrap);
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Admin ICCP permissions (existing feature, preserved)
-// ═══════════════════════════════════════════════════════════════════════════
+async function loadDefaultAuditLog() {
+  if (auditLoaded) return;
+  if (!auditLogStatements) return;
+  try {
+    const response = await fetch('user_transactions.csv', { cache: 'no-store' });
+    if (!response.ok) throw new Error('Default audit file not found');
+    const csvText = await response.text();
+    const { headers, rows } = parseCsvText(csvText);
+    renderAuditStatements(rows, headers);
+    auditLoaded = true;
+  } catch (error) {
+    auditLogStatements.textContent = 'Import a CSV file to view audit statements.';
+  }
+}
 
-function renderIccpPermissions(role) {
-  var permissions = rolePermissions[role] || [];
-  iccpPermissions.innerHTML = '';
+function openModal(modalId, sourceButton) {
+  if (!canAccessSettings) return;
+  if (modalId === 'integrations-modal') {
+    if (!isAdministrator) return;
+    if (!integrationsLaunchBtn || sourceButton !== integrationsLaunchBtn) return;
+    ensureIntegrationsLoaded();
+  }
+  if (modalId === 'audit-modal') {
+    loadDefaultAuditLog();
+  }
 
-  permissions.forEach(function (permission) {
-    var row = document.createElement('label');
-    row.className = 'inline-control';
-
-    var text = document.createElement('span');
-    text.textContent = permission.label;
-
-    var toggle = document.createElement('input');
-    toggle.type = 'checkbox';
-    toggle.checked = permission.enabled;
-
-    if (permission.key === 'ssn' && role !== 'student') {
-      toggle.disabled = true;
-    }
-
-    row.append(text, toggle);
-    iccpPermissions.appendChild(row);
+  settingsModals.forEach((modal) => {
+    modal.hidden = modal.id !== modalId;
   });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  Event listeners
-// ═══════════════════════════════════════════════════════════════════════════
+function closeModals() {
+  settingsModals.forEach((modal) => {
+    modal.hidden = true;
+  });
+}
 
-// Chat submit (button click + Enter key via form submit)
-chatForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-  sendMessage();
+if (settingsToggle) {
+  settingsToggle.addEventListener('click', () => {
+    if (!canAccessSettings || !settingsPanel) return;
+    settingsPanel.hidden = !settingsPanel.hidden;
+  });
+}
+
+settingsLaunchButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    openModal(button.dataset.window, button);
+  });
 });
 
-// Settings toggle
-settingsToggle.addEventListener('click', function () {
-  settingsPanel.hidden = !settingsPanel.hidden;
+closeModalButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    closeModals();
+  });
 });
 
-// Dark mode
-darkModeToggle.addEventListener('change', function () {
-  document.body.classList.toggle('theme-dark', darkModeToggle.checked);
-});
-
-// Text size
-textSizeSelect.addEventListener('change', function () {
-  document.body.dataset.textSize = textSizeSelect.value;
-});
-
-// ICCP role selector (admin panel)
-iccpRole.addEventListener('change', function () {
-  renderIccpPermissions(iccpRole.value);
-});
-
-// Audit log (admin panel) – now fetches from backend
-auditLogBtn.addEventListener('click', function () {
-  auditLogContainer.hidden = !auditLogContainer.hidden;
-  if (!auditLogContainer.hidden && auditLogTable.innerHTML === '') {
-    loadAuditLog();
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closeModals();
+    if (settingsPanel) settingsPanel.hidden = true;
   }
 });
 
-closeAuditBtn.addEventListener('click', function () {
-  auditLogContainer.hidden = true;
-});
+if (darkModeToggle) {
+  darkModeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('theme-dark', darkModeToggle.checked);
+  });
+}
+
+if (textSizeSelect) {
+  textSizeSelect.addEventListener('change', () => {
+    document.body.dataset.textSize = textSizeSelect.value;
+  });
+}
+
+if (importAuditBtn && auditFileInput) {
+  importAuditBtn.addEventListener('click', () => {
+    auditFileInput.click();
+  });
+}
+
+if (auditFileInput) {
+  auditFileInput.addEventListener('change', async () => {
+    const [file] = auditFileInput.files;
+    if (!file) return;
+    const csvText = await file.text();
+    const { headers, rows } = parseCsvText(csvText);
+    renderAuditStatements(rows, headers);
+    auditLoaded = true;
+  });
+}
+
+if (chatForm) {
+  chatForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const question = (chatInput?.value || '').trim();
+    if (!question) return;
+    addBubble(question, 'user');
+    addBubble('Demo chatbot response: request received and evaluated with ICCP rules.', 'bot');
+    chatInput.value = '';
+  });
+}
+
+renderRolePrivileges();

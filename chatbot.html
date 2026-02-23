@@ -3,24 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ICCP Chatbot</title>
+    <title>Lightleap AI - Prometheus</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="shell">
       <section class="card app-card">
-        <header class="app-header">
-          <div>
-            <h1>ICCP Chatbot</h1>
-            <p id="clearance" class="subtitle"></p>
+        <header class="app-header-modern">
+          <div class="app-header-title">
+            <h1>Lightleap AI - Prometheus</h1>
+            <p id="clearance" class="subtitle-modern"></p>
           </div>
-          <button id="settings-toggle" class="icon-btn" type="button" aria-label="Open settings">⚙️</button>
+          <button id="settings-toggle" class="icon-btn" type="button" aria-label="Open settings">Settings</button>
         </header>
 
         <aside id="settings-panel" class="settings-panel" hidden>
-          <h2>Settings</h2>
+          <h2>Administrator Settings</h2>
+          <p class="settings-intro">Select a section to open in a separate Apple-style panel.</p>
+          <div class="settings-launch-grid">
+            <button class="settings-launch-btn" type="button" data-window="basic-modal">Basic Preferences</button>
+            <button class="settings-launch-btn" type="button" data-window="privileges-modal">Privileges</button>
+            <button class="settings-launch-btn" type="button" data-window="audit-modal">Audit Log</button>
+            <button class="settings-launch-btn" type="button" data-window="integrations-modal">Integrations</button>
+          </div>
+        </aside>
 
-          <section class="settings-section">
+        <div class="chat-window" id="chat-window">
+          <div class="bubble bot">Welcome. Ask about your allowed resources.</div>
+        </div>
+
+        <form id="chat-form" class="form-inline">
+          <input type="text" id="chat-input" placeholder="Type your question..." required />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <div id="settings-modal-root">
+      <section id="basic-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card">
+          <header class="modal-header">
             <h3>Basic Preferences</h3>
             <label class="inline-control">
               <span>Dark mode</span>
@@ -58,38 +81,15 @@
             </div>
           </section>
 
-          <section class="settings-section">
+      <section id="integrations-modal" class="settings-modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-card">
+          <header class="modal-header">
             <h3>Integrations</h3>
-            <ul class="integration-list">
-              <li><strong>CAMPUS CE</strong> — API: CAMPUS-API-2244 / Secret: campus-secret-1122</li>
-              <li><strong>PAYMENTUS</strong> — API: PAY-API-7744 / Secret: paymentus-secret-3119</li>
-              <li><strong>ELLUCIAN</strong> — API: ELLUCIAN-API-0093 / Secret: ellucian-secret-5561</li>
-              <li><strong>SOCURE</strong> — API: SOCURE-API-4213 / Secret: socure-secret-1188</li>
-            </ul>
-          </section>
-        </aside>
-
-        <!-- Identity bar: User ID input -->
-        <div class="identity-bar">
-          <label for="userId">User&nbsp;ID</label>
-          <input type="text" id="userId" placeholder="e.g. 1001 or john.doe@campus.ce.edu" />
-          <span id="id-status" class="id-status"></span>
-        </div>
-
-        <div class="chat-window" id="chat-window">
-          <div class="bubble bot">Welcome — ask a question. I&rsquo;ll route it through ICCP enforcement before answering.</div>
-        </div>
-
-        <form id="chat-form" class="form-inline">
-          <input type="text" id="chat-input" placeholder="Type your question…" required />
-          <button type="submit" id="sendBtn">Send</button>
-        </form>
-
-        <!-- Debug panel (collapsible) -->
-        <details id="debug-section" class="debug-section">
-          <summary>ICCP Debug Panel</summary>
-          <pre id="debugPanel">No queries yet.</pre>
-        </details>
+            <button class="close-btn" type="button" data-close-modal aria-label="Close">X</button>
+          </header>
+          <div id="integrations-list" class="integration-cards"></div>
+        </article>
       </section>
     </main>
 

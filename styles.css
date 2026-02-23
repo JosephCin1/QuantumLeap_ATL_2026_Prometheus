@@ -33,14 +33,18 @@ body.theme-dark {
 
 .shell {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
 }
 
 .shell-chat {
-  place-items: stretch;
-  padding: 16px;
+  place-items: center;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
 }
 
 .card {
@@ -64,12 +68,318 @@ body.theme-dark {
 }
 
 .app-card {
-  width: min(1200px, 100%);
-  height: calc(100vh - 32px);
-  max-height: 920px;
+  width: min(95vw, 1600px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0;
+  background: #ffffff;
+}
+
+.theme-dark .app-card {
+  background: #1a1a1a;
+}
+
+/* Apple Design - Modern Header */
+.app-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e5ea;
+  background: #ffffff;
+}
+
+.theme-dark .app-header-modern {
+  background: #1a1a1a;
+  border-bottom-color: #424245;
+}
+
+.app-header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-header-title h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.theme-dark .app-header-title h1 {
+  color: #f5f5f7;
+}
+
+.subtitle-modern {
+  font-size: 0.9rem;
+  color: #86888a;
+  margin: 0;
+  font-weight: 400;
+}
+
+.theme-dark .subtitle-modern {
+  color: #a1a1a6;
+}
+
+.apple-settings-btn {
+  padding: 8px 16px;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apple-settings-btn:hover {
+  background: #1e293b;
+  transform: scale(1.02);
+}
+
+.theme-dark .apple-settings-btn {
+  background: #f5f5f7;
+  color: #1a1a1a;
+}
+
+.theme-dark .apple-settings-btn:hover {
+  background: #e0e0e0;
+}
+
+/* Apple Design - Modern Settings Panel */
+.settings-panel-modern {
+  padding: 20px 24px;
+  background: #f5f5f7;
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.theme-dark .settings-panel-modern {
+  background: #2a2a2a;
+  border-bottom-color: #424245;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.theme-dark .settings-header h2 {
+  color: #f5f5f7;
+}
+
+.settings-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #86888a;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.settings-close-btn:hover {
+  color: #0f172a;
+}
+
+.theme-dark .settings-close-btn:hover {
+  color: #f5f5f7;
+}
+
+.settings-intro {
+  font-size: 0.9rem;
+  color: #86888a;
+  margin: 0 0 12px 0;
+}
+
+.theme-dark .settings-intro {
+  color: #a1a1a6;
+}
+
+.settings-launch-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.settings-launch-btn-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.settings-launch-btn-modern:hover {
+  background: #e8f0ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-dark .settings-launch-btn-modern {
+  background: #3a3a3a;
+  color: #f5f5f7;
+}
+
+.theme-dark .settings-launch-btn-modern:hover {
+  background: #444444;
+}
+
+.settings-icon {
+  font-size: 1.4rem;
+}
+
+/* Apple Design - Chat Window */
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-dark .chat-window {
+  background: #1a1a1a;
+}
+
+.bubble {
+  padding: 12px 14px;
+  border-radius: 16px;
+  max-width: 65%;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bubble.user {
+  background: #0071e3;
+  color: #ffffff;
+  margin-left: auto;
+  border-radius: 18px 4px 18px 18px;
+}
+
+.bubble.bot {
+  background: #e5e5ea;
+  color: #0f172a;
+  border-radius: 4px 18px 18px 18px;
+}
+
+.theme-dark .bubble.bot {
+  background: #424245;
+  color: #f5f5f7;
+}
+
+/* Apple Design - Input Form */
+.form-inline-modern {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #f5f5f7;
+  border-top: 1px solid #e5e5ea;
+}
+
+.theme-dark .form-inline-modern {
+  background: #2a2a2a;
+  border-top-color: #424245;
+}
+
+.form-inline-modern input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #0f172a;
+  transition: all 0.2s;
+}
+
+.form-inline-modern input:focus {
+  outline: none;
+  border-color: #0071e3;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
+.theme-dark .form-inline-modern input {
+  background: #3a3a3a;
+  border-color: #424245;
+  color: #f5f5f7;
+}
+
+.theme-dark .form-inline-modern input:focus {
+  background: #444444;
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+}
+
+.send-btn-modern {
+  padding: 12px 20px;
+  background: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.send-btn-modern:hover {
+  background: #0066d6;
+  transform: scale(1.02);
+}
+
+.send-btn-modern:active {
+  background: #0051ba;
+  transform: scale(0.98);
+}
+
+.theme-dark .send-btn-modern {
+  background: #0a84ff;
+}
+
+.theme-dark .send-btn-modern:hover {
+  background: #0677dd;
 }
 
 h1 {
@@ -237,6 +547,275 @@ details {
   font-size: 1.1rem;
 }
 
+/* Apple Design System */
+.apple-login {
+  max-width: 420px;
+  padding: 48px 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.theme-dark .apple-login {
+  background: rgba(25, 25, 25, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.apple-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.apple-header h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.apple-header .subtitle {
+  font-size: 1.1rem;
+  color: #86888a;
+  font-weight: 400;
+  margin: 0;
+}
+
+.theme-dark .apple-header .subtitle {
+  color: #a1a1a6;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: grid;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.theme-dark .form-group label {
+  color: #f5f5f7;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+  background: #f5f5f7;
+  color: #0f172a;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0071e3;
+  background: #ffffff;
+}
+
+.theme-dark .form-group input,
+.theme-dark .form-group select {
+  background: #424245;
+  border-color: #424245;
+  color: #f5f5f7;
+}
+
+.theme-dark .form-group input:focus,
+.theme-dark .form-group select:focus {
+  background: #555556;
+  border-color: #0071e3;
+}
+
+.apple-form {
+  gap: 0;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #86888a;
+  margin-top: 4px;
+}
+
+.theme-dark .hint {
+  color: #a1a1a6;
+}
+
+.apple-btn {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 24px;
+}
+
+.apple-btn-primary {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+.apple-btn-primary:hover {
+  background: #0066d6;
+}
+
+.apple-btn-primary:active {
+  background: #0051ba;
+  transform: scale(0.98);
+}
+
+.theme-dark .apple-btn-primary {
+  background: #0a84ff;
+}
+
+.theme-dark .apple-btn-primary:hover {
+  background: #0677dd;
+}
+
+.apple-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  margin-top: 32px;
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.theme-dark .apple-tabs {
+  border-bottom-color: #424245;
+}
+
+.apple-tabs .tab-btn {
+  flex: 1;
+  padding: 12px 0;
+  background: transparent;
+  color: #86888a;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.apple-tabs .tab-btn.active {
+  color: #0f172a;
+  border-bottom-color: #0071e3;
+  background: transparent;
+}
+
+.theme-dark .apple-tabs .tab-btn {
+  color: #a1a1a6;
+}
+
+.theme-dark .apple-tabs .tab-btn.active {
+  color: #f5f5f7;
+}
+
+.apple-divider {
+  height: 1px;
+  background: #e5e5ea;
+  margin: 28px 0;
+}
+
+.theme-dark .apple-divider {
+  background: #424245;
+}
+
+.apple-details {
+  margin-top: 24px;
+}
+
+.apple-details summary {
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0071e3;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+
+.apple-details summary:hover {
+  color: #0066d6;
+}
+
+.theme-dark .apple-details summary {
+  color: #0a84ff;
+}
+
+.demo-list {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.demo-item {
+  padding: 12px;
+  background: #f5f5f7;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.theme-dark .demo-item {
+  background: #424245;
+}
+
+.demo-label {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.theme-dark .demo-label {
+  color: #f5f5f7;
+}
+
+.demo-value {
+  font-family: 'Menlo', 'Monaco', monospace;
+  color: #86888a;
+  font-size: 0.8rem;
+}
+
+.theme-dark .demo-value {
+  color: #a1a1a6;
+}
+
+.apple-confirmation {
+  padding: 16px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.theme-dark .apple-confirmation {
+  background: #1b3a1b;
+}
+
+.apple-confirmation h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.apple-confirmation p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.theme-dark .apple-confirmation p {
+  color: #a1a1a6;
+}
+
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -317,6 +896,11 @@ details {
   display: grid;
   place-items: center;
   padding: 22px;
+}
+
+.settings-modal[hidden] {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 .modal-backdrop {
@@ -437,7 +1021,7 @@ details {
 .role-privileges-grid {
   padding: 16px 18px 18px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
@@ -467,8 +1051,54 @@ details {
   font-size: 0.88rem;
 }
 
+.role-item-text {
+  display: grid;
+  gap: 2px;
+}
+
+.role-item-state {
+  color: #64748b;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.theme-dark .role-item-state {
+  color: #94a3b8;
+}
+
 .role-item:last-child {
   margin-bottom: 0;
+}
+
+.add-permission-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: #dbeafe;
+  color: #0f4a8a;
+  border: 2px dashed #60a5fa;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.add-permission-btn:hover {
+  background: #bfdbfe;
+  border-color: #3b82f6;
+}
+
+.theme-dark .add-permission-btn {
+  background: #1e3a5f;
+  color: #93c5fd;
+  border-color: #3b82f6;
+}
+
+.theme-dark .add-permission-btn:hover {
+  background: #2a4a7f;
+  border-color: #60a5fa;
 }
 
 .audit-toolbar {
@@ -492,13 +1122,53 @@ details {
   border-color: #334155;
 }
 
-.audit-statement {
-  margin: 0 0 8px;
-  font-size: 0.9rem;
+.audit-table-wrap {
+  overflow-x: auto;
 }
 
-.audit-statement:last-child {
-  margin-bottom: 0;
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.audit-table th,
+.audit-table td {
+  border-bottom: 1px solid #dbe4f1;
+  text-align: left;
+  padding: 10px;
+  vertical-align: top;
+}
+
+.audit-table th {
+  position: sticky;
+  top: 0;
+  background: #eef3fa;
+  color: #334155;
+  font-weight: 600;
+}
+
+.theme-dark .audit-table th {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.theme-dark .audit-table td {
+  border-color: #334155;
+}
+
+.integrations-table-wrap {
+  border: 1px solid #d9e1ee;
+  border-radius: 14px;
+  background: #f7f9fc;
+  padding: 12px;
+  max-height: 52vh;
+  overflow: auto;
+}
+
+.theme-dark .integrations-table-wrap {
+  background: #0f172a;
+  border-color: #334155;
 }
 
 .integration-cards {

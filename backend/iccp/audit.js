@@ -5,15 +5,11 @@ const auditLog = [];
 
 /**
  * Record an ICCP enforcement event.
+ * Accepts any extra fields (endpoint, user_id, etc.) via spread.
  */
-function logEvent({ trace_id, username, role, requested_resources, decision, reason }) {
+function logEvent(event) {
   auditLog.push({
-    trace_id,
-    username,
-    role,
-    requested_resources,
-    decision,
-    reason,
+    ...event,
     timestamp: new Date().toISOString(),
   });
 

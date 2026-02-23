@@ -290,4 +290,4 @@ function fetchCSVData(resourceId, subjectId) {
   return { found: false };
 }
 
-module.exports = { enforce };
+module.exports = { enforce, resolveUserId, usersContextMap };
